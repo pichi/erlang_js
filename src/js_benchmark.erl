@@ -38,9 +38,14 @@ run() ->
 %% @private
 time_calls(Ctx, Count) ->
     io:format("Starting: ~p~n", [Count]),
-    Start = erlang:now(),
+    Start = timestamp(),
     do_calls(Ctx, Count),
-    timer:now_diff(erlang:now(), Start) / Count.
+    timer:now_diff(timestamp(), Start) / Count.
+
+timestamp() ->
+    try erlang:timestamp()
+    catch error:undefined -> os:timestamp()
+    end.
 
 %% @private
 do_calls(_Ctx, 0) ->
